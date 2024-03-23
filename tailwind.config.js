@@ -12,6 +12,8 @@ export default {
     extend: {
       colors: {
         text: '#000000',
+        brand: '#72A8CA',
+        line: '#9C9C9C',
       },
       spacing: {
         '2': '7px',
