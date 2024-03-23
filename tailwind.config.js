@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
 export default {
     content: [
     "./components/**/*.{js,vue,ts}",
@@ -10,6 +11,10 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        ...defaultTheme.screens,
+        '2xl': '1720px',
+      },
       colors: {
         text: '#000000',
         brand: '#72A8CA',
