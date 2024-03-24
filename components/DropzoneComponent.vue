@@ -1,10 +1,7 @@
 <template>
-    <div 
-    :class="{ 'mt-24': !previewImage, 'mt-10': previewImage }"
-    class="grid sm:grid-cols-4 grid grid-cols-1 gap-4">
-        <div 
-        :class="{ 'col-span-4': !previewImage, 'col-span-3': previewImage }"
-        class="flex items-center justify-center w-full">
+    <div :class="{ 'mt-24': !previewImage, 'mt-10': previewImage }" class="grid sm:grid-cols-4 grid grid-cols-1 gap-4">
+        <div :class="{ 'col-span-4': !previewImage, 'col-span-3': previewImage }"
+            class="flex items-center justify-center w-full">
             <label for="dropzone-file"
                 class="flex flex-col items-center justify-center w-full h-64 border-2 border-blue-900 border-dashed rounded-lg cursor-pointer bg-brand hover:bg-blue-100"
                 @dragover.prevent @drop="handleDrop">
@@ -21,14 +18,13 @@
                 </div>
             </label>
         </div>
-        <img v-if="previewImage" :src="previewImage" alt="Preview"
-            class="mt-4 max-w-full max-h-96" />
+        <img v-if="previewImage" :src="previewImage" alt="Preview" class="mt-4 max-w-full max-h-96" />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import { useImageStore } from '~/store/index';
 export default defineComponent({
     data() {
         return {
@@ -54,10 +50,11 @@ export default defineComponent({
                     alert('Please select a valid image file (PNG, JPG, GIF) with max size 2MB.');
                     return;
                 }
-
                 const reader = new FileReader();
                 reader.onload = () => {
                     this.previewImage = reader.result as string;
+                    // Call action to add image to Pinia store
+                    useImageStore().addImage(this.previewImage);
                 };
                 reader.readAsDataURL(file);
             }
