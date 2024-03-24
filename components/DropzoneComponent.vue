@@ -24,7 +24,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { uploadImage } from '~/services/imageUploadService';
 import { useImageStore } from '~/store/index';
+
 export default defineComponent({
     data() {
         return {
@@ -42,19 +44,27 @@ export default defineComponent({
             event.preventDefault();
             const file = event.dataTransfer?.files[0];
 
-            this.handleFile(file);
+            this.handleFile(file !== undefined ? file : null);
         },
-        handleFile(file: File | null) {
+        async handleFile(file: File | null) {
             if (file) {
                 if (!this.isValidImage(file)) {
                     alert('Please select a valid image file (PNG, JPG, GIF) with max size 2MB.');
                     return;
                 }
                 const reader = new FileReader();
-                reader.onload = () => {
+                reader.onload = async () => {
                     this.previewImage = reader.result as string;
-                    // Call action to add image to Pinia store
-                    useImageStore().addImage(this.previewImage);
+                    try {
+                        // Call the uploadImage function to upload the image to the server
+                        await uploadImage(this.previewImage);
+                        console.log('Image uploaded successfully');
+                        //add the image to the Pinia store after successful upload
+                        useImageStore().addImage(this.previewImage);
+                    } catch (error) {
+                        console.error('Failed to upload image:', error);
+                        // Handle error, display message to the user, etc.
+                    }
                 };
                 reader.readAsDataURL(file);
             }
