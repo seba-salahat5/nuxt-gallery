@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 export async function uploadImage(base64ImageData: string): Promise<void> {
     try {
@@ -9,7 +9,6 @@ export async function uploadImage(base64ImageData: string): Promise<void> {
     } catch (error) {
         console.error('Image upload failed:', error);
         if (axios.isAxiosError(error)) {
-            // If it's an AxiosError, we can access error.response
             if (error.response) {
                 console.error('Server responded with:', error.response.data);
             }
